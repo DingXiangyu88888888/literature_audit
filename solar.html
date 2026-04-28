@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VIPV Physics and Solar-Irradiance Uncertainty — Literature Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ok: #1f7a3a; --warn: #b86b00; --bad: #b71c1c; --muted: #6b7280;
+    --bg: #fafaf8; --surface: #ffffff; --border: #e5e7eb;
+    --accent: #1f3a8a; --header-bg: #1f3a8a; --header-fg: #ffffff;
+    --tag-std: #c8e6c9; --tag-common: #d6e3ff; --tag-uncommon: #ffe4b8;
+    --tag-rare: #ffd1d1; --tag-frontier: #fde2e2;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+         background: var(--bg); color: #1f2937; margin: 0; line-height: 1.55; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+  header.top { background: var(--header-bg); color: var(--header-fg);
+               padding: 36px 24px; margin-bottom: 32px; border-radius: 8px; }
+  header.top h1 { margin: 0 0 8px; font-size: 28px; }
+  header.top .meta { font-size: 14px; opacity: 0.9; }
+  header.top a { color: inherit; opacity: 0.85; }
+  h2 { border-bottom: 2px solid var(--accent); padding-bottom: 6px; margin-top: 40px; color: var(--accent); }
+  h3 { margin-top: 28px; color: #111827; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface);
+          font-size: 13.5px; border: 1px solid var(--border); margin: 16px 0 24px; }
+  thead th { background: #eef2ff; color: #1f2937; padding: 10px 8px;
+             text-align: left; border-bottom: 2px solid var(--accent);
+             font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.02em; }
+  tbody td { padding: 9px 8px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:hover { background: #f0f4ff; }
+  td.center { text-align: center; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px;
+         font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag.std { background: var(--tag-std); color: #14532d; }
+  .tag.common { background: var(--tag-common); color: #1e3a8a; }
+  .tag.uncommon { background: var(--tag-uncommon); color: #92400e; }
+  .tag.rare { background: var(--tag-rare); color: #7f1d1d; }
+  .tag.frontier { background: var(--tag-frontier); color: #7f1d1d; font-weight: 700; }
+  ul { padding-left: 24px; } li { margin: 4px 0; }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; }
+  .lit { color: var(--muted); font-size: 12px; }
+  .lit a, a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .summary-callout { background: #f0f9ff; border-left: 4px solid var(--accent);
+                     padding: 14px 18px; margin: 16px 0 24px; border-radius: 0 6px 6px 0; }
+  .summary-callout strong { color: var(--accent); }
+  .footnote { font-size: 12.5px; color: var(--muted); margin-top: 36px;
+              border-top: 1px solid var(--border); padding-top: 16px; }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <h1>VIPV Physics and Solar-Irradiance Uncertainty — Literature Audit</h1>
+  <div class="meta">
+    Subject: vehicle-integrated photovoltaic (VIPV) generation modelling and solar-irradiance
+    uncertainty for transportation applications. &nbsp;·&nbsp;
+    Audit method: 6-paper schema-derivation read + 14-paper bulk feature-signature extraction;
+    28 axes across 8 clusters; the sample is weighted toward VIPV-direct works. &nbsp;·&nbsp;
+    <a href="index.html">← back to index</a>
+  </div>
+</header>
+
+<div class="summary-callout">
+  <strong>Bottom line.</strong> The audit covers 20 papers. On-vehicle photovoltaics sit between
+  two separate research communities: VIPV physics on one side, solar-irradiance forecasting on
+  the other. Three different ways to model VIPV irradiance compete in the physics literature.
+  Solar forecasting is its own subfield, with well-known probabilistic benchmarks.
+</div>
+
+<h2>Spotlight works</h2>
+<table>
+<thead>
+<tr><th>Paper</th><th>Methodological position</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Araki, Ota, Yamaguchi 2020</strong> — Measurement and modelling of 3D solar irradiance for VIPV
+      (<em>Appl. Sci.</em>) <span class="lit">[Araki2020]</span></td>
+  <td>The most accurate approach. Uses a five-pyranometer array on a real car plus a Monte-Carlo correction for curved roofs. The downside is that real fleets do not carry this kind of sensor array.</td>
+</tr>
+<tr>
+  <td><strong>Smitheram &amp; Gatavi 2025</strong> — Feasibility analysis and optimisation of VIPV systems
+      (<em>World Electric Veh. J.</em>) <span class="lit">[Smitheram2025]</span></td>
+  <td>The most practical approach. A Simulink simulation of a Tesla Model 3 in Melbourne with a simple curvature term and a fuzzy controller for charging. Easy to use but loses direction information.</td>
+</tr>
+<tr>
+  <td><strong>Bunme et al. 2026</strong> — GIS-based solar-irradiance estimation in VIPV
+      (<em>Renew. Energy</em>) <span class="lit">[Bunme2026]</span></td>
+  <td>The middle ground. Combines GIS shading data and Himawari-8/9 satellite irradiance. Validated on a Toyota HiAce in Fukushima with 3–7% mean absolute error under clear skies. Needs region-specific spatial data.</td>
+</tr>
+<tr>
+  <td><strong>Zhang, Luo, Rashidi 2024–2025</strong> — Three VIPV-WCV routing papers
+      (<em>IEEE Trans. Transp. Electrification</em>; <em>IEEE Trans. Intell. Transp. Syst.</em>; <em>IEEE ICM</em>)
+      <span class="lit">[LZ-RP; LZ-MO; LZ-R0]</span></td>
+  <td>The closest direct precedents combining VIPV generation with vehicle routing. All three use the ASHRAE clear-sky model with isotropic-diffuse transposition and a per-road-segment shading factor. Deterministic.</td>
+</tr>
+<tr>
+  <td><strong>van der Meer, Munkhammar, Widén 2021</strong> — A benchmark for multivariate probabilistic
+      solar-irradiance forecasts (<em>Sol. Energy</em>) <span class="lit">[Meer2021]</span></td>
+  <td>MuPEn, a benchmark for multivariate probabilistic forecasts of GHI trajectories. It does not need copula models, which makes it transferable to road-segment-level forecasting. Evaluated at SURFRAD and Oahu using CRPS and energy/variogram scores.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="pill-row">
+  <span class="tag std">STANDARD ≥30%</span>
+  <span class="tag common">COMMON 10–30%</span>
+  <span class="tag uncommon">UNCOMMON 5–10%</span>
+  <span class="tag rare">RARE &lt;5%</span>
+  <span class="tag frontier">OPEN FRONTIER 0%</span>
+</div>
+
+<h2>Field-consensus matrix (N = 20)</h2>
+
+<p class="lit">
+  The audit sample is weighted toward VIPV-direct works (8 of 20 = 40%). The underlying bulk
+  corpus has about 16% VIPV-direct papers (11 of 67). For absolute claims about the wider field,
+  scale VIPV percentages down by roughly 2.5×.
+</p>
+
+<h3>1. Solar resource quantity modelled</h3>
+<table>
+<thead>
+<tr><th>Quantity</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Global horizontal irradiance (GHI)</td><td class="num">16/20 · 80%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Direct normal irradiance (DNI)</td><td class="num">10/20 · 50%</td><td><span class="tag std">COMMON</span></td></tr>
+<tr><td>Diffuse horizontal irradiance (DHI)</td><td class="num">9/20 · 45%</td><td><span class="tag std">COMMON</span></td></tr>
+<tr><td>Global tilted (plane-of-array) irradiance</td><td class="num">6/20 · 30%</td><td><span class="tag common">COMMON</span> in panel-output papers</td></tr>
+<tr><td>3-D / multi-orientation / vector irradiance</td><td class="num">3/20 · 15%</td><td><span class="tag uncommon">EMERGING</span> (Araki 2020 + multi-panel VIPV)</td></tr>
+<tr><td>Time resolution — hourly</td><td class="num">6/20 · 30%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— 5–15 minutes</td><td class="num">6/20 · 30%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— 1-minute / sub-minute</td><td class="num">4/20 · 20%</td><td><span class="tag common">COMMON</span> in nowcasting</td></tr>
+</tbody>
+</table>
+
+<h3>2. Atmospheric and clear-sky modelling</h3>
+<table>
+<thead>
+<tr><th>Clear-sky model</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>None / not used</td><td class="num">5/20 · 25%</td><td>(VIPV-domain papers without clear-sky)</td><td class="lit">Smitheram 2025; Bunme 2026</td></tr>
+<tr><td>Ineichen-Perez</td><td class="num">4/20 · 20%</td><td><span class="tag std">most-cited</span></td><td class="lit">Alfadda 2018; Meer 2021</td></tr>
+<tr><td>ASHRAE / Bird-Hottel-class</td><td class="num">3/20 · 15%</td><td><span class="tag common">older but still used</span></td><td class="lit">Zhang et al. 2024–2025 (the Lanyi Zhang VIPV-WCV line)</td></tr>
+<tr><td>McClear</td><td class="num">2/20 · 10%</td><td><span class="tag common">modern open-data standard</span></td><td class="lit">Meer 2021</td></tr>
+<tr><td>REST2</td><td class="num">2/20 · 10%</td><td><span class="tag common">most accurate per benchmark studies</span></td><td class="lit">Meer 2021; multi-model benchmarking corpus papers</td></tr>
+<tr><td>Kasten</td><td class="num">1/20 · 5%</td><td><span class="tag uncommon">historical</span></td><td class="lit">Caldas 2019</td></tr>
+<tr><td>Other / specialised (libRadtran, WRF-Solar parameterisations)</td><td class="num">5/20 · 25%</td><td>(atmospheric-research papers)</td><td class="lit">—</td></tr>
+<tr><td colspan="4">&nbsp;</td></tr>
+<tr><td>Cloud handling — none / clear-sky-only</td><td class="num">11/20 · 55%</td><td><span class="tag std">DOMINANT</span></td><td class="lit">—</td></tr>
+<tr><td>— k_t clearness index</td><td class="num">2/20 · 10%</td><td><span class="tag common">STANDARD when used</span></td><td class="lit">—</td></tr>
+<tr><td>— numerical-weather-prediction (NWP)-derived</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span> for forecasting</td><td class="lit">—</td></tr>
+<tr><td>— satellite-derived</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span> for forecasting</td><td class="lit">Bunme 2026 (Himawari-8/9)</td></tr>
+<tr><td>— image-based (all-sky imager)</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td><td class="lit">Caldas 2019</td></tr>
+<tr><td>— cloud-type classification</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td><td class="lit">—</td></tr>
+</tbody>
+</table>
+
+<h3>3. Decomposition and transposition</h3>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>GHI → DNI / DHI decomposition modelled (Erbs 1982 or similar)</td><td class="num">1/20 · 5%</td><td><span class="tag frontier">95% NONE — open gap</span></td></tr>
+<tr><td>Tilted-plane / plane-of-array transposition modelled (Hay-Davies, Perez 1990, Reindl, Klucher)</td><td class="num">3/20 · 15%</td><td><span class="tag frontier">85% NONE — open gap</span></td></tr>
+<tr><td>— of which: isotropic transposition</td><td class="num">1/20 · 5%</td><td>(Lanyi Zhang line)</td></tr>
+</tbody>
+</table>
+
+<p class="lit">
+  Note: many papers use GHI, DNI, and DHI as separate measured inputs rather than deriving DNI
+  and DHI from GHI alone. The "no decomposition" count includes those papers. A smaller share
+  of papers actually needs the decomposition step.
+</p>
+
+<h3>4. VIPV / vehicle-specific physics</h3>
+<table>
+<thead>
+<tr><th>Feature</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>VIPV / on-vehicle context</td><td class="num">8/20 · 40%</td><td>(sample-weighted; bulk ≈ 16%)</td>
+    <td class="lit">Araki 2020; Smitheram 2025; Bunme 2026; Lanyi Zhang line; PV hardware papers</td></tr>
+<tr><td>Curved-body modelling — 3D-vector</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td><td class="lit">Araki 2020 (only)</td></tr>
+<tr><td>— sagitta-derate</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td><td class="lit">Smitheram 2025</td></tr>
+<tr><td>— multi-panel-tilt</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td><td class="lit">Lanyi Zhang multi-objective</td></tr>
+<tr><td>Partial shading — scalar derate per route segment</td><td class="num">5–6/20 · 30%</td><td><span class="tag common">DOMINANT in VIPV-routing</span></td><td class="lit">Lanyi Zhang line; Smitheram 2025</td></tr>
+<tr><td>Partial shading — GIS DSM / DTM</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td><td class="lit">Bunme 2026</td></tr>
+<tr><td>Vehicle-motion / dynamic shading</td><td class="num">6/20 · 30%</td><td><span class="tag common">COMMON</span> (per-segment temporal modulation)</td><td class="lit">Lanyi Zhang line</td></tr>
+<tr><td>Panel temperature effects on efficiency</td><td class="num">2/20 · 10%</td><td><span class="tag uncommon">UNCOMMON</span> despite practical importance</td><td class="lit">—</td></tr>
+<tr><td>Soiling / degradation modelled</td><td class="num">0/20 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td><td class="lit">—</td></tr>
+<tr><td>Real vehicle dataset / case study</td><td class="num">4/20 · 20%</td><td><span class="tag common">COMMON</span></td><td class="lit">Bunme 2026 (Toyota HiAce); hardware-test papers</td></tr>
+</tbody>
+</table>
+
+<h3>5. Uncertainty representation</h3>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Value</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="4">Forecast / output type</td>
+    <td>deterministic point</td><td class="num">11/20 · 55%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>probabilistic — parametric</td><td class="num">3/20 · 15%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>probabilistic — scenario</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td></tr>
+<tr><td>N-A (measurement / system simulation)</td><td class="num">5/20 · 25%</td><td>(VIPV-domain papers without forecasts)</td></tr>
+<tr><td rowspan="3">Distributional assumption</td>
+    <td>none</td><td class="num">14/20 · 70%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>mixture</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>nonparametric (KDE)</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>Multivariate (cross-site / cross-time correlation)</td><td>yes</td><td class="num">1/20 · 5%</td>
+    <td><span class="tag frontier">UNDER-STUDIED</span> [Meer2021 only]</td></tr>
+<tr><td rowspan="6">Forecast horizon</td>
+    <td>day-ahead</td><td class="num">6/20 · 30%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>hour-ahead</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>1–3 hour</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>intra-minute</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td></tr>
+<tr><td>N-A measurement / system</td><td class="num">9/20 · 45%</td><td>(VIPV-domain papers)</td></tr>
+<tr><td colspan="3">&nbsp;</td></tr>
+</tbody>
+</table>
+
+<h3>6. Forecasting / prediction method</h3>
+<table>
+<thead>
+<tr><th>Method class</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Physics-based (clear-sky models, libRadtran)</td><td class="num">7/20 · 35%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>Hybrid (NWP + ML, NWP + statistical, image + statistical)</td><td class="num">5/20 · 25%</td><td><span class="tag std">STANDARD</span> for forecasting</td></tr>
+<tr><td>Machine learning — shallow (RF, SVR, MLP)</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td></tr>
+<tr><td>Deep learning (LSTM, GRU, Transformer)</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td></tr>
+<tr><td>Statistical (AR, ARIMA, Markov)</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>Numerical-weather-prediction only</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>N-A (measurement / system simulation)</td><td class="num">4/20 · 20%</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h3>7. Evaluation</h3>
+<table>
+<thead>
+<tr><th>Element</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Metrics — RMSE</td><td class="num">7/20 · 35%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— MAE</td><td class="num">5/20 · 25%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— mean bias error</td><td class="num">5/20 · 25%</td><td><span class="tag common">STANDARD</span></td></tr>
+<tr><td>— normalised RMSE / nMAE</td><td class="num">3/20 · 15%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>— continuous ranked probability score (CRPS)</td><td class="num">2/20 · 10%</td><td><span class="tag common">EMERGING</span> standard for probabilistic</td></tr>
+<tr><td>— skill score vs persistence</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span> for forecasting</td></tr>
+<tr><td>Benchmark comparator — another paper</td><td class="num">9/20 · 45%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— smart-persistence</td><td class="num">3/20 · 15%</td><td><span class="tag common">COMMON</span> for short-horizon</td></tr>
+<tr><td>— climatology</td><td class="num">1/20 · 5%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>Real-world dataset used</td><td class="num">13/20 · 65%</td><td><span class="tag std">STANDARD</span></td></tr>
+</tbody>
+</table>
+
+<h3>8. Application framing</h3>
+<table>
+<thead>
+<tr><th>Domain</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>VIPV / on-vehicle</td><td class="num">8/20 · 40%</td><td>(sample-weighted)</td></tr>
+<tr><td>Utility-PV (grid integration)</td><td class="num">7/20 · 35%</td><td><span class="tag std">STANDARD</span> in forecasting</td></tr>
+<tr><td>Atmospheric research</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>Measurement physics</td><td class="num">2/20 · 10%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>EV-charging / grid</td><td class="num">1/20 · 5%</td><td><span class="tag rare">EMERGING</span></td></tr>
+</tbody>
+</table>
+
+<h2>Caveats</h2>
+<ul>
+  <li>N = 20 is small but covers the main method types: 8 VIPV-direct papers, 4 probabilistic forecasting papers, and 3 direct VIPV-routing precedents.</li>
+  <li>The sample is weighted toward VIPV-direct works. The bulk corpus has about 16% VIPV-direct papers, so the VIPV percentages here over-represent the wider field by roughly 2.5×.</li>
+  <li>The 95% "no decomposition" count includes papers that use GHI, DNI, and DHI as separate measured inputs (i.e. papers that skip the step rather than fail at it). The narrower point is that papers which derive DNI and DHI from GHI alone are rare in this corpus.</li>
+</ul>
+
+<div class="footnote">
+  <p>
+    Source: 6-paper schema-derivation read on the citation-ready core (Araki 2020, Smitheram 2025,
+    Bunme 2026, Alfadda 2018, Meer 2021, Caldas 2019) plus 14-paper bulk feature-signature
+    extraction (including six open-access auto-downloads, five user-fetched VIPV-physics priority
+    papers, and three direct-precedent Lanyi Zhang VIPV-WCV papers). Per-paper signatures and
+    the full frequency CSV are in the project repository.
+  </p>
+  <p>
+    <a href="index.html">← back to audit index</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Deterministic E-VRPTW — Literature Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ok: #1f7a3a;
+    --warn: #b86b00;
+    --bad: #b71c1c;
+    --muted: #6b7280;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --accent: #1f3a8a;
+    --header-bg: #1f3a8a;
+    --header-fg: #ffffff;
+    --tag-std: #c8e6c9;
+    --tag-common: #d6e3ff;
+    --tag-uncommon: #ffe4b8;
+    --tag-rare: #ffd1d1;
+    --tag-novel: #f3d6f5;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.55;
+  }
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+  header.top {
+    background: var(--header-bg); color: var(--header-fg);
+    padding: 36px 24px; margin-bottom: 32px; border-radius: 8px;
+  }
+  header.top h1 { margin: 0 0 8px; font-size: 28px; }
+  header.top .meta { font-size: 14px; opacity: 0.9; }
+  header.top a { color: inherit; opacity: 0.85; }
+  h2 {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 6px; margin-top: 40px; color: var(--accent);
+  }
+  h3 { margin-top: 28px; color: #111827; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface);
+          font-size: 13.5px; border: 1px solid var(--border);
+          margin: 16px 0 24px; }
+  thead th {
+    background: #eef2ff; color: #1f2937; padding: 10px 8px;
+    text-align: left; border-bottom: 2px solid var(--accent);
+    font-weight: 600; font-size: 12.5px; text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  tbody td { padding: 9px 8px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:hover { background: #f0f4ff; }
+  td.center { text-align: center; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .tag.std { background: var(--tag-std); color: #14532d; }
+  .tag.common { background: var(--tag-common); color: #1e3a8a; }
+  .tag.uncommon { background: var(--tag-uncommon); color: #92400e; }
+  .tag.rare { background: var(--tag-rare); color: #7f1d1d; }
+  .tag.novel { background: var(--tag-novel); color: #6b21a8; }
+  .check { color: var(--ok); font-weight: 700; }
+  .cross { color: var(--bad); font-weight: 700; }
+  .partial { color: var(--warn); font-weight: 700; }
+  ul { padding-left: 24px; }
+  li { margin: 4px 0; }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; }
+  .lit { color: var(--muted); font-size: 12px; }
+  .lit a, a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .summary-callout {
+    background: #f0f9ff; border-left: 4px solid var(--accent);
+    padding: 14px 18px; margin: 16px 0 24px; border-radius: 0 6px 6px 0;
+  }
+  .summary-callout strong { color: var(--accent); }
+  .footnote { font-size: 12.5px; color: var(--muted); margin-top: 36px;
+              border-top: 1px solid var(--border); padding-top: 16px; }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <h1>Deterministic E-VRPTW — Literature Audit</h1>
+  <div class="meta">
+    Subject: deterministic electric vehicle routing with time windows &nbsp;·&nbsp;
+    Audit method: 4-paper foundation review (Schneider 2014, Pelletier 2016, Kucukoglu 2021, Erdelić 2019)
+    + 40-paper implementation-corpus feature-signature audit. &nbsp;·&nbsp;
+    <a href="index.html">← back to index</a>
+  </div>
+</header>
+
+<div class="summary-callout">
+  <strong>Bottom line.</strong> The audit covers 32 features across the 40 papers. The planned
+  baseline includes every feature that appears in at least 25% of papers, and leaves out every
+  feature that appears in 20% or fewer. It also adds one feature that no paper in the corpus
+  uses: on-vehicle solar harvesting.
+</div>
+
+<h2>Field-consensus matrix</h2>
+
+<p>
+  The table below lists every audited feature. For each one: a short description, whether the
+  planned baseline includes it, how often it appears across the 40 papers, and the strongest
+  references supporting the choice.
+</p>
+
+<p>
+  <strong>Reading the columns.</strong>
+  <span class="mono">Planned?</span> shows whether the planned baseline includes the feature
+  (<span class="check">✓</span> yes, <span class="cross">✗</span> no, <span class="partial">⚠</span> partial).
+  <span class="mono">Field freq</span> is the count and percentage in the 40-paper corpus.
+  <span class="mono">Field tag</span> sums up the four-survey consensus.
+  <span class="mono">Supporting literature</span> lists one to three key cites.
+</p>
+
+<div class="pill-row">
+  <span class="tag std">STANDARD ≥70% in field</span>
+  <span class="tag common">COMMON variant 25–70%</span>
+  <span class="tag uncommon">UNCOMMON variant 5–20%</span>
+  <span class="tag rare">RARE &lt;5%</span>
+  <span class="tag novel">PAPER-SPECIFIC novelty</span>
+</div>
+
+<h3>1. Routing structure</h3>
+<table>
+<thead>
+<tr>
+  <th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td><strong>Multi-vehicle dispatch</strong></td>
+  <td>Multiple vehicles depart the depot in parallel; customers are partitioned across them.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">39/40 · 97.5%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014; Pelletier et al. 2016 §4.1; Kucukoglu et al. 2021 §3</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><strong>Homogeneous fleet</strong></td>
+  <td>All vehicles share identical specs (capacity, battery, charge rate). Planned baseline uses 4 identical vehicles.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">29/40 · 72.5%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014; Kucukoglu et al. 2021 §3.4 (~88% homogeneous)</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Heterogeneous fleet</td>
+  <td>Mixed vehicle types (different capacities/batteries). Planned baseline deliberately uses a homogeneous fleet to isolate the energy/service trade-off from fleet-mix effects.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">11/40 · 27.5%</td>
+  <td><span class="tag common">COMMON variant</span></td>
+  <td class="lit">Hiermann et al. 2016 (E-FSMVRPTW); Kucukoglu et al. 2021 §3.4</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><strong>Capacity constraint</strong></td>
+  <td>Each vehicle has a max load (planned baseline: 40 units). Cargo accumulates from depot through customer demands.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">39/40 · 97.5%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014 constraints (8)–(9); all four foundation surveys</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Hard time windows</td>
+  <td>Customer must be served within <span class="mono">[e_i, l_i]</span>; arriving outside the window kills feasibility. Planned baseline propagates time hard but allows late arrivals via penalty (see row 6).</td>
+  <td class="center"><span class="partial">⚠ partial</span></td>
+  <td class="num">28/40 · 70.0%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014 constraint (7); Bräysy &amp; Gendreau 2005 §VRPTW canon</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><strong>Soft TW + lateness penalty</strong></td>
+  <td>Late arrival is feasible but adds <span class="mono">λ·max(0, arrival − l_i)</span> to the objective. Planned baseline uses linear lateness with λ ∈ [20, 60] $/h per customer.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">17/40 · 42.5%</td>
+  <td><span class="tag common">COMMON</span> in 2023+ E-VRP; <span class="tag std">STANDARD</span> in classical VRPTW</td>
+  <td class="lit">Bräysy &amp; Gendreau 2005; Tilk et al. 2021; Refianti 2026</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><strong>Service time per customer</strong></td>
+  <td>Fixed dwell time at each customer (planned baseline: 0.08–0.25 h).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">34/40 · 85.0%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014; all four foundation surveys</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><strong>Depot return</strong></td>
+  <td>Each vehicle starts and ends at a single depot (vertices 0 and N+1 in Schneider's notation).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">37/40 · 92.5%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">Schneider et al. 2014; default across all surveyed VRP variants</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>Multi-depot</td>
+  <td>Vehicles distributed across multiple depot locations. Planned baseline uses a single depot.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">4/40 · 10.0%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">su17062700 (multi-depot collab); JARIE 2021; CSCWD 2024</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td>Pickup-and-delivery</td>
+  <td>Vehicles both deliver and collect; load can rise and fall along route. Planned baseline is delivery-only.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">7/40 · 17.5%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">Tilk et al. 2021; Dumez 2021 (TRB)</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td>Driver working-hour limits</td>
+  <td>Bounded shift duration / mandatory rest periods. Standard E-VRP modelling does not include this; the planned baseline follows that convention.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">6/40 · 15.0%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">Kucukoglu et al. 2021 §7 (flagged as future direction)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>2. Time-window service constraints</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>12</td>
+  <td><strong>Lateness functional form: linear</strong></td>
+  <td>Penalty = <span class="mono">λ_i · max(0, τ_i − l_i)</span>. Planned baseline uses constant per-customer λ_i sampled from [20, 60].</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">~12/17 papers w/ soft TW</td>
+  <td><span class="tag std">STANDARD VRPTW form</span></td>
+  <td class="lit">Bräysy &amp; Gendreau 2005; Desaulniers et al. 2014 chapter</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><strong>On-time delivery rate as service-level metric</strong></td>
+  <td>Reported metric: fraction of customers served within their time window. Aligns the planned baseline with the project's logistics-delivery service-level focus.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">implicit in soft-TW work</td>
+  <td><span class="tag common">COMMON in logistics-application papers</span></td>
+  <td class="lit">Boysen et al. 2021 last-mile survey; Tilk et al. 2021</td>
+</tr>
+</tbody>
+</table>
+
+<h3>3. Energy and battery</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>14</td>
+  <td><strong>Battery state-of-charge tracking</strong></td>
+  <td>Continuous variable y_i records remaining battery at each node along the route.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">22/40 · 55.0%</td>
+  <td><span class="tag std">STANDARD for EV papers</span></td>
+  <td class="lit">Schneider et al. 2014 constraints (10)–(11); Pelletier et al. 2016 §4.3</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td>Minimum SoC reserve</td>
+  <td>Lower bound on battery level prevents deep discharge. Planned baseline uses 8 kWh on a 60 kWh battery (≈13%).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">10/40 · 25.0%</td>
+  <td><span class="tag common">COMMON variant</span></td>
+  <td class="lit">Pelletier et al. 2016 (battery-degradation prevention rationale)</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><strong>Distance-based energy</strong></td>
+  <td><span class="mono">E_drive = energy_rate · distance</span>, with constant rate (planned baseline: 0.2 kWh/km).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">27/40 · 67.5%</td>
+  <td><span class="tag std">STANDARD default</span></td>
+  <td class="lit">Schneider et al. 2014; Kucukoglu et al. 2021 §3.2 (~100/136 papers)</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td>Speed-dependent energy</td>
+  <td>Energy varies with vehicle speed (e.g., aerodynamic drag). Planned baseline uses constant speed (32 km/h) so speed dependence is moot.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">4/40 · 10.0%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">Goeke &amp; Schneider 2015; TITS 2023 (perishable EVRP)</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td>Load-dependent energy</td>
+  <td>Energy varies with cargo weight. Planned baseline uses load-independent rate.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">7/40 · 17.5%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">Rastani et al. 2020; Goeke &amp; Schneider 2015</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td>Slope/grade-aware energy</td>
+  <td>Energy varies with terrain. Planned baseline assumes flat terrain.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">2/40 · 5.0%</td>
+  <td><span class="tag rare">RARE</span></td>
+  <td class="lit">Macrina et al.; pone.0281131 (slope/load/speed-aware)</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td>Battery degradation</td>
+  <td>Battery capacity degrades with cycling. Routing-tier models almost universally exclude this — degradation is a sub-day-scale concern not coupled with single-shift routing.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">0/40 · 0.0%</td>
+  <td><span class="tag rare">RARE — never modelled</span></td>
+  <td class="lit">Pelletier et al. 2017; Pelletier 2016 §5.3 (open frontier)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>4. Charging operations</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>21</td>
+  <td><strong>Recharging at dedicated stations</strong></td>
+  <td>Vehicles can detour to charging-station nodes (separate from customers). Planned baseline has 5 charging-candidate nodes per scenario.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">21/40 · 52.5%</td>
+  <td><span class="tag std">STANDARD for EV papers</span></td>
+  <td class="lit">Schneider et al. 2014 (set F); Pelletier et al. 2016 §4.2</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><strong>Partial recharge</strong></td>
+  <td>Vehicle can charge to any level (not necessarily full). Planned baseline uses one-step repair: detour to nearest feasible station, charge for the duration needed.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">10/40 · 25.0%</td>
+  <td><span class="tag common">COMMON variant</span> (38% in Erdelić)</td>
+  <td class="lit">Cortés-Murcia et al. 2019; Erdelić &amp; Carić 2019 §4.4</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><strong>Linear charging</strong></td>
+  <td>Charge time = linear function of charge amount (constant rate). Planned baseline uses 30 kW constant.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">20/40 · 50.0%</td>
+  <td><span class="tag std">STANDARD when charging is modelled</span></td>
+  <td class="lit">Schneider et al. 2014 (linear recharge to Q at rate g)</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td>Nonlinear / piecewise charging</td>
+  <td>CC-CV charging curve (linear-then-tapering). Planned baseline uses linear simplification.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">2/40 · 5.0%</td>
+  <td><span class="tag rare">RARE</span> (10% in Erdelić)</td>
+  <td class="lit">Cluster Computing 2024 (s10586); Kucukoglu et al. 2021 §7</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td>Charging-station queueing / capacity</td>
+  <td>Stations have finite throughput; vehicles may wait. Planned baseline assumes uncapacitated stations.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">2/40 · 5.0%</td>
+  <td><span class="tag rare">RARE</span></td>
+  <td class="lit">Erdelić &amp; Carić 2019 §4.12 (flagged as underexplored)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>5. Travel-time representation</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>26</td>
+  <td><strong>Constant speed</strong></td>
+  <td>Travel time = distance / constant speed (planned baseline: 32 km/h). The traffic sub-model in the planned baseline is intentionally trivial.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">26/40 · 65.0%</td>
+  <td><span class="tag std">STANDARD majority</span></td>
+  <td class="lit">Schneider et al. 2014; Kucukoglu et al. 2021 §3.2</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td>Time-dependent travel time</td>
+  <td>Travel time varies with departure time (rush-hour profiles). Not in the planned baseline.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">5/40 · 12.5%</td>
+  <td><span class="tag uncommon">UNCOMMON variant</span></td>
+  <td class="lit">Lera-Romero et al. 2023 (EJOR — canonical); Refianti 2026</td>
+</tr>
+</tbody>
+</table>
+
+<h3>6. Objective and cost components</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>28</td>
+  <td><strong>Distance / energy cost in objective</strong></td>
+  <td>Objective minimises either total distance (baseline policy) or total net energy (solar-aware policy).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">38/40 · 95.0%</td>
+  <td><span class="tag std">STANDARD</span></td>
+  <td class="lit">All four foundation surveys</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><strong>Fixed vehicle cost in objective</strong></td>
+  <td>Per-vehicle cost penalises fleet utilisation. Included in the planned baseline (vehicle_use=50.0).</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">21/40 · 52.5%</td>
+  <td><span class="tag common">COMMON variant</span></td>
+  <td class="lit">Most logistics-application papers; Erdelić &amp; Carić 2019 §2 (hierarchical "minimise vehicles" rationale)</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td>CO₂ / emissions cost</td>
+  <td>Carbon-emission term in the objective. Not in the planned baseline; the on-vehicle solar contribution partially substitutes the green-routing framing.</td>
+  <td class="center"><span class="cross">✗</span></td>
+  <td class="num">1/40 · 2.5%</td>
+  <td><span class="tag rare">RARE</span> in MILP formulations</td>
+  <td class="lit">Demir et al. 2012 (Pollution Routing Problem); Pelletier 2016 (indirectly)</td>
+</tr>
+<tr>
+  <td>31</td>
+  <td><strong>Objective form: weighted-sum scalarisation</strong></td>
+  <td>Planned baseline uses <span class="mono">α·distance + β·lateness + γ·unserved + δ·vehicle_use</span> with weights 1/1/200/50. Confirmed field-mainstream by Pelletier and Kucukoglu.</td>
+  <td class="center"><span class="check">✓</span></td>
+  <td class="num">~30/40 ≈ 75%</td>
+  <td><span class="tag std">FIELD-MAINSTREAM</span></td>
+  <td class="lit">Pelletier et al. 2016 §4.2; Kucukoglu et al. 2021 §3.1</td>
+</tr>
+</tbody>
+</table>
+
+<h3>7. Paper-specific contribution</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Feature</th><th>What it means</th><th>Planned?</th><th>Field freq</th><th>Field tag</th><th>Supporting literature</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>32</td>
+  <td><strong>VIPV solar harvesting term</strong></td>
+  <td>Per-segment energy gain: <span class="mono">E_solar = irradiance · pv_area · pv_efficiency · seg_factor · travel_time</span>; <span class="mono">seg_factor = 0.5(f_i + f_j)</span>. Net energy <span class="mono">E_net = E_drive − E_solar</span> drives the solar-aware policy.</td>
+  <td class="center"><span class="check">✓ — paper's own contribution</span></td>
+  <td class="num">0/40 · 0.0%</td>
+  <td><span class="tag novel">PAPER-SPECIFIC NOVELTY</span></td>
+  <td class="lit">Lanyi Zhang et al. 2024 (IEEE TTE); Lanyi Zhang et al. 2025 (IEEE T-ITS); Lanyi Zhang et al. 2025 (IEEE ICM)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Risk Register highlights</h3>
+<table>
+<thead>
+<tr><th>#</th><th>Issue</th><th>Disposition</th><th>Action / status</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>Soft TW + lateness penalty: STANDARD in classical VRPTW, only 17/40 (42.5%) in the recent E-VRP corpus</td>
+  <td>rebut + cite both VRPTW and recent E-VRP</td>
+  <td>Cite both VRPTW (Bräysy &amp; Gendreau 2005, Desaulniers 2014) and recent E-VRP papers (Tilk 2021, Refianti 2026) as the formulation source</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Weighted-sum objective vs. Schneider's hierarchical formulation</td>
+  <td>rebut</td>
+  <td>Field-mainstream confirmed. Methods section will (a) state the design intent (always-serve property + balanced distance/lateness), (b) report results across a weight grid, (c) supplement with ε-constraint Pareto-front sweep</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Partial recharge vs. Schneider's full-only</td>
+  <td>rebut (one line)</td>
+  <td>Established E-VRPTW variant; cite Cortés-Murcia 2019, Erdelić &amp; Carić 2019, Kucukoglu et al. 2021</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>No load-/speed-/slope-dependent energy</td>
+  <td>accept-risk</td>
+  <td>Document as deliberate simplifications. Linear distance-based energy is STANDARD (~100/136 papers per Kucukoglu)</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>VIPV solar harvesting has no E-VRPTW precedent</td>
+  <td>rebut (this is the project's contribution)</td>
+  <td>Present as paper's own contribution. Cite the Lanyi Zhang VIPV-WCV line as VIPV-routing predecessor</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>Battery degradation ignored</td>
+  <td>accept-risk</td>
+  <td>Universally backed: 0/40 papers in corpus model it. Document as out-of-scope sub-day-scale concern</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Charging-station capacity / queueing ignored</td>
+  <td>accept-risk</td>
+  <td>Common E-VRPTW simplification; document explicitly</td>
+</tr>
+</tbody>
+</table>
+
+<div class="footnote">
+  <p>
+    Source: 4-paper foundation review (Schneider 2014, Pelletier 2016, Kucukoglu 2021, Erdelić 2019)
+    plus 40-paper implementation-corpus feature-signature audit. Per-paper signatures and the full
+    frequency CSV are in the project repository.
+  </p>
+  <p>
+    <a href="index.html">← back to audit index</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>

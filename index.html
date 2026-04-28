@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VIPV Logistics Routing — Literature Audit Tables</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --accent: #1f3a8a;
+    --header-bg: #1f3a8a;
+    --header-fg: #ffffff;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --muted: #6b7280;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.55;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+  header.top {
+    background: var(--header-bg); color: var(--header-fg);
+    padding: 36px 28px; margin-bottom: 32px; border-radius: 8px;
+  }
+  header.top h1 { margin: 0 0 8px; font-size: 28px; }
+  header.top .meta { font-size: 14px; opacity: 0.92; }
+  h2 {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 6px; margin-top: 40px; color: var(--accent);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-top: 8px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 22px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07); transform: translateY(-1px); }
+  .card a { color: inherit; text-decoration: none; display: block; }
+  .card h3 {
+    margin: 0 0 10px; font-size: 16px; color: var(--accent);
+  }
+  .card p { margin: 6px 0; font-size: 13.5px; color: #1f2937; }
+  .card .stat { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .footnote {
+    font-size: 12.5px; color: var(--muted);
+    margin-top: 36px;
+    border-top: 1px solid var(--border); padding-top: 16px;
+  }
+  .footnote a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <h1>VIPV Logistics Routing — Literature Audit Tables</h1>
+  <div class="meta">
+    Supplementary material to the literature review chapter of the thesis
+    <em>Probabilistic and online routing for vehicle-integrated photovoltaic logistics fleets</em>.
+    The four audits below cover ~120 implementation papers across the four subfields
+    that bound the proposed work.
+  </div>
+</header>
+
+<h2>Audits</h2>
+
+<div class="grid">
+
+  <div class="card">
+    <a href="evrptw.html">
+      <h3>1. Deterministic E-VRPTW</h3>
+      <p>Field-consensus matrix for electric vehicle routing with time windows. Covers 32 modelling features grouped into routing structure, time-window service constraints, energy and battery, charging operations, travel time, and objective form.</p>
+      <p class="stat">N = 40 implementation papers · 32 audited features · 4 foundation surveys</p>
+    </a>
+  </div>
+
+  <div class="card">
+    <a href="uncertainty.html">
+      <h3>2. Routing under uncertainty</h3>
+      <p>Field distribution across uncertainty sources, optimisation paradigms, uncertainty-set representations, recourse decisions, service-constraint handling, solver class, and evaluation protocol.</p>
+      <p class="stat">N = 50 implementation papers · 24 axes · 8 clusters</p>
+    </a>
+  </div>
+
+  <div class="card">
+    <a href="online.html">
+      <h3>3. Online and rolling-horizon dispatch</h3>
+      <p>Field distribution across the eleven Pillac et al. classification criteria plus EV-specific extensions, decision-framework type, anticipation strategy, recourse pattern, and online evaluation protocol.</p>
+      <p class="stat">N = 9 implementation papers · 25 axes · 8 clusters</p>
+    </a>
+  </div>
+
+  <div class="card">
+    <a href="solar.html">
+      <h3>4. VIPV physics and solar-irradiance uncertainty</h3>
+      <p>Field distribution across solar resource components, atmospheric and clear-sky modelling, decomposition and tilt transposition, vehicle-specific physics, uncertainty representation, forecasting method, and evaluation.</p>
+      <p class="stat">N = 20 implementation papers · 28 axes · 8 clusters</p>
+    </a>
+  </div>
+
+</div>
+
+<h2>How to read these tables</h2>
+<p>
+  Every audit follows the same shape:
+</p>
+<ul>
+  <li>A <strong>field-consensus matrix</strong> reporting the share of papers that adopt each feature or methodological choice. Frequency tags use the same convention across audits — <em>STANDARD</em> (≥70%), <em>COMMON variant</em> (25–70%), <em>UNCOMMON variant</em> (5–20%), <em>RARE</em> (&lt;5%), and <em>OPEN FRONTIER</em> (0%).</li>
+  <li>A <strong>spotlight set</strong> of 4–6 representative works for each subfield, with a one-line methodological position.</li>
+  <li>A <strong>gap statement</strong> identifying where the field has unaddressed combinations.</li>
+</ul>
+
+<div class="footnote">
+  <p>
+    Source for each table: per-paper feature-signature audit conducted by the project author.
+    Citations within each table use short author-year keys; the matching reference list in the
+    thesis chapter resolves them in IEEE format.
+  </p>
+</div>
+
+</div>
+</body>
+</html>

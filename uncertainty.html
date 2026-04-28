@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Routing under Uncertainty — Literature Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ok: #1f7a3a; --warn: #b86b00; --bad: #b71c1c; --muted: #6b7280;
+    --bg: #fafaf8; --surface: #ffffff; --border: #e5e7eb;
+    --accent: #1f3a8a; --header-bg: #1f3a8a; --header-fg: #ffffff;
+    --tag-std: #c8e6c9; --tag-common: #d6e3ff; --tag-uncommon: #ffe4b8;
+    --tag-rare: #ffd1d1; --tag-novel: #f3d6f5; --tag-frontier: #fde2e2;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+         background: var(--bg); color: #1f2937; margin: 0; line-height: 1.55; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+  header.top { background: var(--header-bg); color: var(--header-fg);
+               padding: 36px 24px; margin-bottom: 32px; border-radius: 8px; }
+  header.top h1 { margin: 0 0 8px; font-size: 28px; }
+  header.top .meta { font-size: 14px; opacity: 0.9; }
+  header.top a { color: inherit; opacity: 0.85; }
+  h2 { border-bottom: 2px solid var(--accent); padding-bottom: 6px; margin-top: 40px; color: var(--accent); }
+  h3 { margin-top: 28px; color: #111827; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface);
+          font-size: 13.5px; border: 1px solid var(--border); margin: 16px 0 24px; }
+  thead th { background: #eef2ff; color: #1f2937; padding: 10px 8px;
+             text-align: left; border-bottom: 2px solid var(--accent);
+             font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.02em; }
+  tbody td { padding: 9px 8px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:hover { background: #f0f4ff; }
+  td.center { text-align: center; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px;
+         font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag.std { background: var(--tag-std); color: #14532d; }
+  .tag.common { background: var(--tag-common); color: #1e3a8a; }
+  .tag.uncommon { background: var(--tag-uncommon); color: #92400e; }
+  .tag.rare { background: var(--tag-rare); color: #7f1d1d; }
+  .tag.frontier { background: var(--tag-frontier); color: #7f1d1d; font-weight: 700; }
+  ul { padding-left: 24px; } li { margin: 4px 0; }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; }
+  .lit { color: var(--muted); font-size: 12px; }
+  .lit a, a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .summary-callout { background: #f0f9ff; border-left: 4px solid var(--accent);
+                     padding: 14px 18px; margin: 16px 0 24px; border-radius: 0 6px 6px 0; }
+  .summary-callout strong { color: var(--accent); }
+  .footnote { font-size: 12.5px; color: var(--muted); margin-top: 36px;
+              border-top: 1px solid var(--border); padding-top: 16px; }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <h1>Routing under Uncertainty — Literature Audit</h1>
+  <div class="meta">
+    Subject: stochastic / robust routing literature with uncertain travel time, energy, demand,
+    or service time. &nbsp;·&nbsp;
+    Audit method: 5-paper schema-derivation read + 45-paper bulk feature-signature extraction;
+    24 axes across 8 clusters. &nbsp;·&nbsp;
+    <a href="index.html">← back to index</a>
+  </div>
+</header>
+
+<div class="summary-callout">
+  <strong>Bottom line.</strong> The audit covers 50 papers. The most cited method is the
+  budget-polytope adaptive robust model. Most papers compare against a deterministic baseline,
+  but only 24% compare against a different uncertainty method, and only 6% test how the result
+  changes with the number of scenarios.
+</div>
+
+<h2>Spotlight works</h2>
+<table>
+<thead>
+<tr><th>Paper</th><th>Methodological position</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Pelletier, Jabali, Laporte 2019</strong> — EVRP with energy-consumption uncertainty
+      (<em>Transp. Res. Part B</em>) <span class="lit">[Pelletier2019]</span></td>
+  <td>The simplest case: a static robust model. The plan is fixed before the route starts. Tests five different ways to describe uncertainty (box, budget, route-dependent budget, ball-box, ellipsoidal). Easy to solve but cautious.</td>
+</tr>
+<tr>
+  <td><strong>Liu et al. 2025</strong> — joint travel-time + energy uncertainty (<em>Transp. Res. Part E</em>) <span class="lit">[TRE2025]</span></td>
+  <td>An adaptive robust model with two uncertainty sources at once (travel time and energy). The plan can react to what actually happens during the route. Solver: a Bi-Level Search Algorithm combining ALNS with labelling.</td>
+</tr>
+<tr>
+  <td><strong>Bian et al. 2024</strong> — adaptive robust EVRPTW with partial recharge (<em>Transp. Res. Part C</em>) <span class="lit">[BianTRC2024]</span></td>
+  <td>Adaptive robust with energy uncertainty. The plan can react during the route. Solver: column-and-constraint generation with VNS-TS as the master heuristic.</td>
+</tr>
+<tr>
+  <td><strong>Han, Lee, Park 2018</strong> — robust VRPTW with hard time windows under demand and travel-time uncertainty (<em>Comput. Oper. Res.</em>) <span class="lit">[HanCOR2018]</span></td>
+  <td>The same adjustable robust method, applied to delivery routing without the electric-vehicle features. Solver: two-stage AVNS — first minimise vehicle count, then minimise distance.</td>
+</tr>
+<tr>
+  <td><strong>Marinaki &amp; Marinakis 2020</strong> — discrete-scenario worst-case robust VRPTW (<em>Comput. Ind. Eng.</em>) <span class="lit">[MarinakiCIE2020]</span></td>
+  <td>Uses a fixed list of scenarios instead of an uncertainty set. Harder to solve cleanly but works on small problems.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="pill-row">
+  <span class="tag std">STANDARD ≥30%</span>
+  <span class="tag common">COMMON variant 10–30%</span>
+  <span class="tag uncommon">UNCOMMON 5–10%</span>
+  <span class="tag rare">RARE &lt;5%</span>
+  <span class="tag frontier">OPEN FRONTIER 0%</span>
+</div>
+
+<h2>Field-consensus matrix (N = 50)</h2>
+
+<h3>1. Uncertainty source</h3>
+<table>
+<thead>
+<tr><th>Source</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>Travel-time / traffic uncertainty</td><td class="num">27/50 · 54%</td><td><span class="tag std">STANDARD</span></td>
+    <td class="lit">Liu et al. 2025; Han et al. 2018; Marinaki &amp; Marinakis 2020</td></tr>
+<tr><td>Energy-consumption uncertainty</td><td class="num">11/50 · 22%</td><td><span class="tag common">COMMON variant</span></td>
+    <td class="lit">Pelletier et al. 2019 (foundational); Bian et al. 2024</td></tr>
+<tr><td>Demand uncertainty</td><td class="num">8/50 · 16%</td><td><span class="tag common">COMMON variant</span></td>
+    <td class="lit">Han et al. 2018</td></tr>
+<tr><td>Service-time uncertainty</td><td class="num">8/50 · 16%</td><td><span class="tag common">COMMON variant</span></td>
+    <td class="lit">Han et al. 2018; corpus EVRPTW soft-TW papers</td></tr>
+<tr><td>Renewable / solar / weather uncertainty</td><td class="num">0/50 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td>
+    <td class="lit">— (closest analogue: charging-station availability uncertainty in Hof et al. 2023, see "Online and rolling-horizon dispatch" audit)</td></tr>
+<tr><td>Source coupling — single source</td><td class="num">~22/45 · 49%</td><td><span class="tag std">DOMINANT</span></td><td class="lit">—</td></tr>
+<tr><td>Source coupling — independent-joint</td><td class="num">~14/50 · 28%</td><td><span class="tag common">COMMON</span></td>
+    <td class="lit">Liu et al. 2025 (TT + Energy); Han et al. 2018 (Demand + TT)</td></tr>
+<tr><td>Source coupling — correlated-joint</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE</span></td>
+    <td class="lit">Bian et al. 2024 (evaluation only, not solving)</td></tr>
+</tbody>
+</table>
+
+<h3>2. Uncertainty representation</h3>
+<table>
+<thead>
+<tr><th>Representation</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>Budget polytope (Bertsimas–Sim)</td><td class="num">17/50 · 34%</td><td><span class="tag std">DOMINANT</span></td>
+    <td class="lit">Bertsimas &amp; Sim 2003 (foundational); Pelletier et al. 2019; Liu et al. 2025; Han et al. 2018; Bian et al. 2024</td></tr>
+<tr><td>Continuous parametric distribution</td><td class="num">6/50 · 13%</td><td><span class="tag common">COMMON</span></td>
+    <td class="lit">classical SP corpus; chance-constrained variants</td></tr>
+<tr><td>Discrete scenario, probability-weighted (SAA)</td><td class="num">5/50 · 11%</td><td><span class="tag common">COMMON</span></td>
+    <td class="lit">SP-2-stage-recourse corpus</td></tr>
+<tr><td>Discrete scenario, equiprobable (worst-case robust)</td><td class="num">5/50 · 11%</td><td><span class="tag common">COMMON</span></td>
+    <td class="lit">Marinaki &amp; Marinakis 2020</td></tr>
+<tr><td>Box (Soyster)</td><td class="num">3/50 · 6%</td><td><span class="tag uncommon">UNCOMMON</span></td>
+    <td class="lit">Pelletier et al. 2019 (one of five tested set types)</td></tr>
+<tr><td>Fuzzy / possibilistic</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span></td>
+    <td class="lit">credibility-theory chance-constrained EVRPTW</td></tr>
+<tr><td>Distributionally robust — Wasserstein</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE / EMERGING</span></td>
+    <td class="lit">data-driven robust VRPTW (single corpus paper)</td></tr>
+<tr><td>Distributionally robust — moment-based</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE / EMERGING</span></td>
+    <td class="lit">DRO-moment robust VRPTW with TW assignment</td></tr>
+<tr><td>Ellipsoidal / norm-bounded</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE</span></td>
+    <td class="lit">Pelletier et al. 2019 (one of five tested set types)</td></tr>
+<tr><td>Route-dependent budget (Γ scales with route length)</td><td class="num">8/50 · 16%</td><td><span class="tag common">EMERGING — distinctive recurring</span></td>
+    <td class="lit">Liu et al. 2025; Pelletier et al. 2019 U³; Han et al. 2018</td></tr>
+</tbody>
+</table>
+
+<h3>3. Optimisation paradigm</h3>
+<table>
+<thead>
+<tr><th>Paradigm</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>Static robust (no recourse)</td><td class="num">17/50 · 34%</td><td><span class="tag std">DOMINANT</span></td>
+    <td class="lit">Pelletier et al. 2019; Marinaki &amp; Marinakis 2020</td></tr>
+<tr><td>Adaptive robust (two-stage)</td><td class="num">6/50 · 12%</td><td><span class="tag common">COMMON</span> (60% of citation-ready core)</td>
+    <td class="lit">Liu et al. 2025; Bian et al. 2024; Han et al. 2018</td></tr>
+<tr><td>Stochastic programming (two-stage with recourse)</td><td class="num">4/50 · 9%</td><td><span class="tag uncommon">UNCOMMON</span></td><td class="lit">SP-VRPTW corpus</td></tr>
+<tr><td>Chance-constrained (individual)</td><td class="num">4/50 · 9%</td><td><span class="tag uncommon">UNCOMMON</span></td><td class="lit">CC-VRPTW corpus</td></tr>
+<tr><td>Fuzzy</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span></td><td class="lit">credibility-theory papers</td></tr>
+<tr><td>Distributionally robust</td><td class="num">1/50 · 2%</td><td><span class="tag rare">EMERGING</span></td><td class="lit">DRO-Wasserstein VRPTW</td></tr>
+<tr><td>Risk-measure (CVaR / VaR)</td><td class="num">1/50 · 2%</td><td><span class="tag rare">EMERGING</span></td><td class="lit">DRO-moment with worst-case CVaR</td></tr>
+</tbody>
+</table>
+
+<h3>4. Recourse / wait-and-see decisions</h3>
+<table>
+<thead>
+<tr><th>Recourse type</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>None (a-priori only)</td><td class="num">32/50 · 64%</td><td><span class="tag std">DOMINANT</span></td><td class="lit">static-robust corpus</td></tr>
+<tr><td>Arrival-time adaptive</td><td class="num">14/50 · 28%</td><td><span class="tag common">COMMON</span> in adaptive-robust</td>
+    <td class="lit">Liu et al. 2025; Han et al. 2018; Bian et al. 2024</td></tr>
+<tr><td>Routing adaptive (re-routing recourse)</td><td class="num">4/50 · 9%</td><td><span class="tag uncommon">UNCOMMON</span></td><td class="lit">—</td></tr>
+<tr><td>Charging-plan adaptive</td><td class="num">4/50 · 8%</td><td><span class="tag uncommon">UNCOMMON</span> (EVRP-specific)</td>
+    <td class="lit">Liu et al. 2025; Bian et al. 2024</td></tr>
+<tr><td>Customer-skip with penalty</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span></td><td class="lit">—</td></tr>
+<tr><td>SoC / load adaptive</td><td class="num">4/50 · 8%</td><td><span class="tag uncommon">UNCOMMON</span></td>
+    <td class="lit">Liu et al. 2025; Bian et al. 2024</td></tr>
+</tbody>
+</table>
+
+<h3>5. Service-constraint handling</h3>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Treatment</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="5">Time windows under uncertainty</td><td>hard-preserved (robust feasibility)</td><td class="num">22/50 · 44%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>soft with stochastic lateness</td><td class="num">7/50 · 16%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>soft with hard latest-time cap</td><td class="num">6/50 · 12%</td><td><span class="tag common">COMMON</span> (Liu et al. 2025 style)</td></tr>
+<tr><td>chance-constrained</td><td class="num">4/50 · 9%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>TW assignment as decision</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span> (DRO-moment corpus)</td></tr>
+<tr><td rowspan="3">Capacity</td><td>deterministic (capacity not uncertain)</td><td class="num">27/50 · 54%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>hard robust</td><td class="num">12/50 · 24%</td><td><span class="tag common">COMMON</span> when demand is uncertain</td></tr>
+<tr><td>recourse</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td rowspan="3">SoC / energy feasibility</td><td>hard robust under worst-case realisation</td><td class="num">10/50 · 20%</td><td><span class="tag common">COMMON</span> in EVRP-ECU papers</td></tr>
+<tr><td>chance-constrained</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>not modelled (non-EV paper)</td><td class="num">22/50 · 44%</td><td><span class="tag common">COMMON</span> (filtered baseline)</td></tr>
+</tbody>
+</table>
+
+<h3>6. Solver class</h3>
+<table>
+<thead>
+<tr><th>Class</th><th>Frequency</th><th>Tag</th><th>Strongest cites</th></tr>
+</thead>
+<tbody>
+<tr><td>Metaheuristic only</td><td class="num">26/50 · 52%</td><td><span class="tag std">DOMINANT in bulk corpus</span></td><td class="lit">large heuristic-VRP literature</td></tr>
+<tr><td>Matheuristic (master + structured subproblem)</td><td class="num">11/50 · 22%</td><td><span class="tag std">STANDARD in citation-ready core</span></td>
+    <td class="lit">Liu et al. 2025 (BLSA); Bian et al. 2024 (CCG + VNS-TS); Han et al. 2018 (AVNS)</td></tr>
+<tr><td>Exact decomposition (Benders / CCG / column-and-row)</td><td class="num">6/50 · 12%</td><td><span class="tag common">COMMON</span> for SP and adaptive-robust</td><td class="lit">Bian et al. 2024 (CCG)</td></tr>
+<tr><td>Exact monolithic</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span> at full scale</td><td class="lit">small-instance MIP only</td></tr>
+<tr><td>Exact column generation / branch-and-price</td><td class="num">2/50 · 4%</td><td><span class="tag rare">RARE</span></td><td class="lit">labeling-based subproblem</td></tr>
+</tbody>
+</table>
+
+<h3>7. Evaluation protocol</h3>
+<table>
+<thead>
+<tr><th>Element</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Out-of-sample Monte Carlo</td><td class="num">22/50 · 44%</td><td><span class="tag common">COMMON, growing standard</span></td></tr>
+<tr><td>Sensitivity to uncertainty intensity (Γ, θ, β)</td><td class="num">31/50 · 62%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Sensitivity to scenario / sample-set size</td><td class="num">3/50 · 6%</td><td><span class="tag rare">RARE — under-studied</span></td></tr>
+<tr><td>Comparison vs deterministic baseline</td><td class="num">33/50 · 66%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Comparison vs alternative uncertainty paradigm</td><td class="num">12/50 · 24%</td><td><span class="tag common">UNDER-STUDIED</span></td></tr>
+<tr><td>Value of stochastic information (VSS / EVPI)</td><td class="num">0/50 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td></tr>
+</tbody>
+</table>
+
+<h3>8. Application framing</h3>
+<table>
+<thead>
+<tr><th>Domain</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Generic benchmark (Solomon / Schneider instances)</td><td class="num">27/50 · 54%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>Urban / city case study</td><td class="num">10/50 · 20%</td><td><span class="tag common">COMMON supplement</span></td></tr>
+<tr><td>Last-mile / parcel framing</td><td class="num">5/50 · 11%</td><td><span class="tag common">COMMON in motivation</span></td></tr>
+<tr><td>Cold-chain / e-grocery / refrigerated</td><td class="num">1/50 · 2%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>VIPV / on-vehicle solar mention</td><td class="num">0/50 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td></tr>
+</tbody>
+</table>
+
+<h2>Caveats</h2>
+<ul>
+  <li>About 10 of the 45 bulk papers are deterministic models that came up because of keyword matches ("scenario" or "robust" used in other contexts). Their signatures mark all uncertainty rows as <em>absent / N-A</em>. The aggregate counts above include them, but the rankings are not affected.</li>
+  <li>Distributionally-robust and risk-measure methods are under-represented (1 paper each) compared to their place in the broader operations-research literature. The search keywords favoured explicit "robust" or "stochastic" wording.</li>
+  <li>A sample of 50 is large enough for rankings but not for fine percentage claims. Round to 5% steps where it matters.</li>
+</ul>
+
+<div class="footnote">
+  <p>
+    Source: 5-paper schema-derivation read on the citation-ready core
+    (TRE 2025, TRB 2019, COR 2018, CIE 2020, TRC 2024) plus 45-paper bulk feature-signature
+    extraction. Per-paper signatures and the full frequency CSV are in the project repository.
+  </p>
+  <p>
+    <a href="index.html">← back to audit index</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Online and Rolling-Horizon Dispatch — Literature Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ok: #1f7a3a; --warn: #b86b00; --bad: #b71c1c; --muted: #6b7280;
+    --bg: #fafaf8; --surface: #ffffff; --border: #e5e7eb;
+    --accent: #1f3a8a; --header-bg: #1f3a8a; --header-fg: #ffffff;
+    --tag-std: #c8e6c9; --tag-common: #d6e3ff; --tag-uncommon: #ffe4b8;
+    --tag-rare: #ffd1d1; --tag-frontier: #fde2e2;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+         background: var(--bg); color: #1f2937; margin: 0; line-height: 1.55; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+  header.top { background: var(--header-bg); color: var(--header-fg);
+               padding: 36px 24px; margin-bottom: 32px; border-radius: 8px; }
+  header.top h1 { margin: 0 0 8px; font-size: 28px; }
+  header.top .meta { font-size: 14px; opacity: 0.9; }
+  header.top a { color: inherit; opacity: 0.85; }
+  h2 { border-bottom: 2px solid var(--accent); padding-bottom: 6px; margin-top: 40px; color: var(--accent); }
+  h3 { margin-top: 28px; color: #111827; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface);
+          font-size: 13.5px; border: 1px solid var(--border); margin: 16px 0 24px; }
+  thead th { background: #eef2ff; color: #1f2937; padding: 10px 8px;
+             text-align: left; border-bottom: 2px solid var(--accent);
+             font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.02em; }
+  tbody td { padding: 9px 8px; vertical-align: top; border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:hover { background: #f0f4ff; }
+  td.center { text-align: center; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px;
+         font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag.std { background: var(--tag-std); color: #14532d; }
+  .tag.common { background: var(--tag-common); color: #1e3a8a; }
+  .tag.uncommon { background: var(--tag-uncommon); color: #92400e; }
+  .tag.rare { background: var(--tag-rare); color: #7f1d1d; }
+  .tag.frontier { background: var(--tag-frontier); color: #7f1d1d; font-weight: 700; }
+  ul { padding-left: 24px; } li { margin: 4px 0; }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; }
+  .lit { color: var(--muted); font-size: 12px; }
+  .lit a, a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .summary-callout { background: #f0f9ff; border-left: 4px solid var(--accent);
+                     padding: 14px 18px; margin: 16px 0 24px; border-radius: 0 6px 6px 0; }
+  .summary-callout strong { color: var(--accent); }
+  .footnote { font-size: 12.5px; color: var(--muted); margin-top: 36px;
+              border-top: 1px solid var(--border); padding-top: 16px; }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <h1>Online and Rolling-Horizon Dispatch — Literature Audit</h1>
+  <div class="meta">
+    Subject: dynamic / online vehicle routing where new information arrives during the working day.
+    &nbsp;·&nbsp;
+    Audit method: 5-paper schema-derivation read + 4-paper bulk feature-signature extraction
+    (N = 9); categories follow Pillac et al.'s eleven classification criteria. &nbsp;·&nbsp;
+    <a href="index.html">← back to index</a>
+  </div>
+</header>
+
+<div class="summary-callout">
+  <strong>Bottom line.</strong> The audit covers 9 papers. Most papers (64%) follow the same
+  pattern: freeze what is already done and replan the rest. The decision approach is split
+  evenly between rolling-horizon offline replanning and event-driven re-optimisation. The
+  papers test their methods almost entirely with synthetic event simulation rather than against
+  real operational data.
+</div>
+
+<h2>Spotlight works</h2>
+<table>
+<thead>
+<tr><th>Paper</th><th>Methodological position</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Pillac, Gendreau, Guéret, Medaglia 2013</strong> — A review of dynamic vehicle routing problems
+      (<em>Eur. J. Oper. Res.</em>) <span class="lit">[Pillac2013]</span> (with Psaraftis, Wen, Kontovas 2016 <span class="lit">[Psaraftis2016]</span>)</td>
+  <td>Provides the eleven-criterion taxonomy still used today to compare dynamic-routing papers.</td>
+</tr>
+<tr>
+  <td><strong>Van Hentenryck &amp; Bent 2006</strong> — Online Stochastic Combinatorial Optimization
+      (MIT Press) <span class="lit">[VanHentenryck2006]</span></td>
+  <td>A sample-based consensus framework. Well-grounded but slow: it samples many possible futures at every decision point.</td>
+</tr>
+<tr>
+  <td><strong>Hof, Schiffer, Walther 2023</strong> — Dynamic routing for the EV shortest-path problem with
+      charging-station occupancy (<em>Transp. Res. Part C</em>) <span class="lit">[Hof2023]</span></td>
+  <td>Models charging-station occupancy as uncertain and uses a Markov decision process with neural networks to predict waiting times. Fast to run online but needs long offline training.</td>
+</tr>
+<tr>
+  <td><strong>Lan &amp; Behnamian 2022</strong> — Real-time scheduling with flexible time windows
+      (<em>Swarm Evol. Comput.</em>) <span class="lit">[Lan2022]</span></td>
+  <td>A rolling-horizon approach with 15 fixed time slices and a particle-swarm solver. Practical but does not look ahead.</td>
+</tr>
+<tr>
+  <td><strong>Lera-Romero, Méndez-Díaz, Miranda-Bront 2023</strong> — Time-dependent EVRPTW
+      (<em>Eur. J. Oper. Res.</em>) <span class="lit">[LeraRomero2023]</span></td>
+  <td>Offline-only, but provides a piecewise-linear travel-time model where vehicles never overtake each other. Any time-aware online method needs this kind of input.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="pill-row">
+  <span class="tag std">STANDARD ≥50%</span>
+  <span class="tag common">COMMON 25–50%</span>
+  <span class="tag uncommon">UNCOMMON 10–25%</span>
+  <span class="tag rare">RARE &lt;10%</span>
+  <span class="tag frontier">OPEN FRONTIER 0%</span>
+</div>
+
+<h2>Field-consensus matrix (N = 9)</h2>
+
+<p class="lit">
+  N = 9 is small. The counts below are simple fractions of 9, with percentages rounded to whole
+  numbers. The Pillac 2013 survey covers 117 papers and serves as broader context.
+</p>
+
+<h3>1. Problem type and context (Pillac taxonomy)</h3>
+<table>
+<thead>
+<tr><th>Axis</th><th>Distribution</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Pillac problem-type — dynamic-deterministic (DD)</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>— dynamic-stochastic (DS)</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>— borderline (a-priori-plus-recourse)</td><td class="num">1/9 · 11%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>— N-A (survey paper)</td><td class="num">1/9 · 11%</td><td>(filtered)</td></tr>
+<tr><td>Pillac-survey reference (117 papers): DD ~47% / DS ~37% / SD-as-comparison ~16%</td><td class="lit">[Pillac2013]</td><td>—</td></tr>
+<tr><td>Logistical context — generic / Solomon-style benchmark</td><td class="num">4–5/9 · 50%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— courier / parcel / urban last-mile</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>Transport mode — road</td><td class="num">8/9 · 89%</td><td><span class="tag std">DOMINANT</span></td></tr>
+</tbody>
+</table>
+
+<h3>2. Online setting</h3>
+<table>
+<thead>
+<tr><th>Axis</th><th>Value</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="6">What is revealed during the route</td>
+    <td>new customer requests</td><td class="num">7/9 · 78%</td><td><span class="tag std">DOMINANT signal</span></td></tr>
+<tr><td>demand realisation</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>travel-time updates</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>charging-station occupancy</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> [Hof2023]</td></tr>
+<tr><td>vehicle breakdown</td><td class="num">1/9 · 11%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>solar / weather / VIPV</td><td class="num">0/9 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td></tr>
+<tr><td>Time horizon — single-shift / single-day</td><td>—</td><td class="num">7/9 · 78%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>Decision frequency — per-event</td><td>—</td><td class="num">4/9 · 44%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>— per-rolling-window / per-time-step</td><td>—</td><td class="num">4/9 · 44%</td><td><span class="tag common">COMMON</span></td></tr>
+</tbody>
+</table>
+
+<h3>3. Decision framework</h3>
+<table>
+<thead>
+<tr><th>Axis</th><th>Value</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="5">Decision-framework type</td>
+    <td>rolling-horizon offline-replan</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>event-driven re-optimisation</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>sample-based consensus / regret</td><td class="num">1/9 · 11%</td><td><span class="tag rare">CLASSIC but underused now</span></td></tr>
+<tr><td>a-priori plus recourse</td><td class="num">1/9 · 11%</td><td>borderline</td></tr>
+<tr><td>pre-computed policy</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> (ML / RL)</td></tr>
+<tr><td rowspan="5">Anticipation strategy</td>
+    <td>none / myopic</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span> baseline</td></tr>
+<tr><td>forecast-based</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>scenario sampling</td><td class="num">1/9 · 11%</td><td><span class="tag rare">CLASSIC</span></td></tr>
+<tr><td>consensus / regret</td><td class="num">1/9 · 11%</td><td><span class="tag rare">CLASSIC</span></td></tr>
+<tr><td>value-function approximation</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> [Hof2023]</td></tr>
+<tr><td rowspan="3">Future-request modelling at decision time</td>
+    <td>ignored (myopic)</td><td class="num">3/9 · 33%</td><td><span class="tag std">DOMINANT baseline</span></td></tr>
+<tr><td>known distribution</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>point forecast / scenarios</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+</tbody>
+</table>
+
+<h3>4. Recourse / repair operations</h3>
+<table>
+<thead>
+<tr><th>Operation</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Insert new request</td><td class="num">7/9 · 78%</td><td><span class="tag std">UNIVERSAL</span></td></tr>
+<tr><td>Re-route remaining</td><td class="num">6/9 · 67%</td><td><span class="tag std">UNIVERSAL</span></td></tr>
+<tr><td>Wait at customer / depot</td><td class="num">5/9 · 56%</td><td><span class="tag std">STANDARD</span> anticipation tactic</td></tr>
+<tr><td>Re-charge mid-route</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span> in EV-DVRPs</td></tr>
+<tr><td>Relocate empty vehicle</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>Skip / cancel customer</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span> (rejection-capable papers)</td></tr>
+<tr><td>Time-window extension</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>Committed decisions reversible? — partial-reversible (frozen-served prefix)</td><td class="num">7/9 · 78%</td><td><span class="tag std">DOMINANT</span> canonical pattern</td></tr>
+<tr><td>— append-only</td><td class="num">1/9 · 11%</td><td><span class="tag rare">RARE</span></td></tr>
+</tbody>
+</table>
+
+<h3>5. Service-constraint handling</h3>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Treatment</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="3">Time windows under uncertainty</td>
+    <td>soft with penalty</td><td class="num">4/9 · 44%</td><td><span class="tag common">COMMON</span> in DVRPs</td></tr>
+<tr><td>hard preserved</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+<tr><td>not applicable (no TWs)</td><td class="num">3/9 · 33%</td><td>—</td></tr>
+<tr><td rowspan="2">Capacity</td>
+    <td>hard</td><td class="num">6/9 · 67%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>recourse</td><td class="num">1/9 · 11%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td rowspan="3">SoC / energy feasibility</td>
+    <td>not modelled (non-EV paper)</td><td class="num">7/9 · 78%</td><td>(filtered baseline)</td></tr>
+<tr><td>hard</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> EV-frontier</td></tr>
+<tr><td>recourse en-route</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> [Hof2023]</td></tr>
+<tr><td>Rejection ability</td><td>yes</td><td class="num">2/9 · 22%</td><td><span class="tag uncommon">UNCOMMON</span></td></tr>
+</tbody>
+</table>
+
+<h3>6. Solver class</h3>
+<table>
+<thead>
+<tr><th>Class</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Metaheuristic / hybrid</td><td class="num">5–6/9 · 56%</td><td><span class="tag std">DOMINANT</span></td></tr>
+<tr><td>Matheuristic (master + structured subproblem)</td><td class="num">2/9 · 22%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>Exact decomposition (Benders / CCG / L-shaped)</td><td class="num">2/9 · 22%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>Branch-and-cut-and-price</td><td class="num">1/9 · 11%</td><td><span class="tag rare">RARE</span> for online</td></tr>
+<tr class="lit"><td colspan="3">Pillac 2013 reference: "given that fast solution times are essential, most of the approaches are heuristic."</td></tr>
+</tbody>
+</table>
+
+<h3>7. Online evaluation protocol</h3>
+<table>
+<thead>
+<tr><th>Element</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>Synthetic event simulation</td><td class="num">8/9 · 89%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Replay-based historical trace (real operational data)</td><td class="num">1/9 · 11%</td><td><span class="tag rare">RARE</span></td></tr>
+<tr><td>Comparison vs offline / perfect-information bound</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span> (gold standard)</td></tr>
+<tr><td>Comparison vs static a-priori plan</td><td class="num">5/9 · 56%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Comparison vs alternative online strategy</td><td class="num">7/9 · 78%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>Acceleration techniques — partial re-optimisation</td><td class="num">6/9 · 67%</td><td><span class="tag std">STANDARD</span></td></tr>
+<tr><td>— scenario-pool reuse</td><td class="num">3/9 · 33%</td><td><span class="tag common">COMMON</span></td></tr>
+<tr><td>— neural-network approximation of look-ahead values</td><td class="num">1/9 · 11%</td><td><span class="tag rare">EMERGING</span> [Hof2023]</td></tr>
+</tbody>
+</table>
+
+<h3>8. EV / charging and project-relevance flags</h3>
+<table>
+<thead>
+<tr><th>Flag</th><th>Frequency</th><th>Tag</th></tr>
+</thead>
+<tbody>
+<tr><td>EV / charging modelled</td><td class="num">2/9 · 22%</td><td><span class="tag rare">EV-DVRP frontier</span></td></tr>
+<tr><td>VIPV / on-vehicle solar mentioned</td><td class="num">0/9 · 0%</td><td><span class="tag frontier">OPEN FRONTIER</span></td></tr>
+</tbody>
+</table>
+
+<h2>Boundary note: what counts as "online dispatch"?</h2>
+<p>
+  Florio et al. 2022 is a borderline case. The plan is computed offline and never re-optimised,
+  but small recourse decisions (preventive restocking, swapping adjacent customers) happen
+  during the route. The Pillac taxonomy calls this <em>static-stochastic</em> rather than
+  dynamic. The working definition used here is simple: a paper counts as online dispatch only
+  if at least one decision is re-computed during the day, in response to new information that
+  arrives after the start of the shift.
+</p>
+
+<h2>Caveats</h2>
+<ul>
+  <li>N = 9 is small. The percentages above are simple fractions of 9. The Pillac 2013 survey covers 117 papers and is a useful broader reference.</li>
+  <li>The corpus was limited to papers with full-text PDFs available. A larger corpus (N ≥ 30) would give stronger rankings.</li>
+  <li>One online VRPTW chapter was originally tagged for a different subfield review and surfaced here through keyword match. Its signature confirms it belongs in this audit.</li>
+</ul>
+
+<div class="footnote">
+  <p>
+    Source: 5-paper schema-derivation read on the citation-ready core
+    (Pillac/Psaraftis surveys, Van Hentenryck-Bent 2006, Florio 2022, Hof 2023, Lan 2022)
+    plus 4-paper bulk feature-signature extraction. Per-paper signatures and the full
+    frequency CSV are in the project repository.
+  </p>
+  <p>
+    <a href="index.html">← back to audit index</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>
